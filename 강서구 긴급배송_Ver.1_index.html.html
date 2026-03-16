@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>긴급배송 신청 | 더샵</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --primary: #FF571C;
+    --primary-dark: #E04A14;
+    --primary-light: #FFF0EB;
+    --accent: #1D6FA4;
+    --accent-light: #EBF4FB;
+    --text-primary: #1A1A1A;
+    --text-secondary: #666;
+    --text-muted: #999;
+    --border: #E5E5E5;
+    --bg: #F7F8FA;
+    --white: #FFFFFF;
+    --success: #2EAD6E;
+    --error: #E03131;
+    --radius: 12px;
+    --radius-sm: 8px;
+    --shadow: 0 2px 16px rgba(0,0,0,0.08);
+    --shadow-lg: 0 8px 32px rgba(0,0,0,0.12);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Noto Sans KR', sans-serif;
+    background: var(--bg);
+    color: var(--text-primary);
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ── Header ── */
+  header {
+    background: var(--white);
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 1px 8px rgba(0,0,0,0.06);
+  }
+  .header-inner {
+    max-width: 540px;
+    margin: 0 auto;
+    padding: 0 20px;
+    height: 56px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .logo {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    text-decoration: none;
+    height: 36px;
+  }
+  .logo svg {
+    height: 36px;
+    width: auto;
+  }
+  .header-tag {
+    background: var(--accent-light);
+    color: var(--accent);
+    font-size: 11px;
+    font-weight: 600;
+    padding: 4px 10px;
+    border-radius: 20px;
+    border: 1px solid rgba(29,111,164,0.2);
+  }
+
+  /* ── Page Layout ── */
+  .page {
+    max-width: 540px;
+    margin: 0 auto;
+    padding: 24px 16px 60px;
+  }
+
+  /* ── Hero ── */
+  .hero {
+    background: linear-gradient(135deg, var(--primary) 0%, #E8400F 100%);
+    border-radius: var(--radius);
+    padding: 28px 24px;
+    color: white;
+    margin-bottom: 20px;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -30px; right: -30px;
+    width: 130px; height: 130px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.08);
+  }
+  .hero::after {
+    content: '';
+    position: absolute;
+    bottom: -40px; right: 20px;
+    width: 90px; height: 90px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.06);
+  }
+  .hero-eyebrow {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    opacity: 0.8;
+    margin-bottom: 8px;
+  }
+  .hero h1 {
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    margin-bottom: 6px;
+    line-height: 1.3;
+  }
+  .hero p {
+    font-size: 13px;
+    opacity: 0.85;
+    line-height: 1.5;
+  }
+  .hero-icon {
+    font-size: 28px;
+    margin-bottom: 10px;
+  }
+
+  /* ── Policy Card ── */
+  .policy-card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    margin-bottom: 20px;
+    overflow: hidden;
+    box-shadow: var(--shadow);
+  }
+  .policy-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 20px;
+    cursor: pointer;
+    user-select: none;
+    transition: background 0.15s;
+  }
+  .policy-header:hover { background: var(--bg); }
+  .policy-header-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .policy-icon {
+    width: 32px; height: 32px;
+    background: var(--accent-light);
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px;
+  }
+  .policy-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-primary);
+  }
+  .policy-subtitle {
+    font-size: 11px;
+    color: var(--text-muted);
+    margin-top: 1px;
+  }
+  .policy-toggle {
+    width: 24px; height: 24px;
+    display: flex; align-items: center; justify-content: center;
+    border-radius: 50%;
+    background: var(--bg);
+    transition: transform 0.25s;
+    color: var(--text-secondary);
+    font-size: 12px;
+  }
+  .policy-toggle.open { transform: rotate(180deg); }
+
+  .policy-body {
+    display: none;
+    padding: 0 20px 20px;
+    border-top: 1px solid var(--border);
+  }
+  .policy-body.open { display: block; }
+
+  .policy-grid {
+    display: grid;
+    gap: 10px;
+    padding-top: 16px;
+  }
+  .policy-item {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+  }
+  .policy-num {
+    width: 22px; height: 22px;
+    background: var(--primary);
+    color: white;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px;
+    font-weight: 700;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+  .policy-content {}
+  .policy-label {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--accent);
+    margin-bottom: 2px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .policy-desc {
+    font-size: 13px;
+    color: var(--text-primary);
+    line-height: 1.5;
+  }
+  .policy-highlight {
+    display: inline-block;
+    background: var(--primary-light);
+    color: var(--primary);
+    font-weight: 600;
+    padding: 1px 6px;
+    border-radius: 4px;
+    font-size: 12px;
+  }
+
+  /* ── Form Card ── */
+  .form-card {
+    background: var(--white);
+    border-radius: var(--radius);
+    padding: 24px 20px;
+    box-shadow: var(--shadow);
+    border: 1px solid var(--border);
+  }
+  .form-section-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--border);
+  }
+  .form-group {
+    margin-bottom: 16px;
+  }
+  .form-group:last-of-type { margin-bottom: 0; }
+
+  label {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 6px;
+  }
+  .req {
+    color: var(--primary);
+    margin-left: 2px;
+  }
+  .opt-badge {
+    font-size: 10px;
+    font-weight: 500;
+    color: var(--text-muted);
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 1px 5px;
+    margin-left: 5px;
+    vertical-align: middle;
+  }
+
+  input[type="text"],
+  input[type="tel"],
+  textarea,
+  select {
+    width: 100%;
+    padding: 12px 14px;
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius-sm);
+    font-size: 15px;
+    font-family: 'Noto Sans KR', sans-serif;
+    color: var(--text-primary);
+    background: var(--white);
+    transition: border-color 0.15s, box-shadow 0.15s;
+    outline: none;
+    -webkit-appearance: none;
+  }
+  input::placeholder, textarea::placeholder { color: var(--text-muted); font-size: 14px; }
+  input:focus, textarea:focus, select:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(29,111,164,0.12);
+  }
+  input.error, textarea.error { border-color: var(--error); }
+
+  textarea {
+    resize: vertical;
+    min-height: 90px;
+    line-height: 1.5;
+  }
+
+  .reason-options {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin-bottom: 10px;
+  }
+  .reason-btn {
+    padding: 10px;
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius-sm);
+    background: var(--white);
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--text-secondary);
+    cursor: pointer;
+    text-align: center;
+    transition: all 0.15s;
+    font-family: 'Noto Sans KR', sans-serif;
+  }
+  .reason-btn:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-light); }
+  .reason-btn.selected { border-color: var(--accent); color: var(--accent); background: var(--accent-light); font-weight: 600; }
+
+  .divider { height: 1px; background: var(--border); margin: 20px 0; }
+
+  /* ── Submit ── */
+  .submit-wrap {
+    margin-top: 24px;
+  }
+  .btn-submit {
+    width: 100%;
+    padding: 16px;
+    background: var(--primary);
+    color: white;
+    border: none;
+    border-radius: var(--radius-sm);
+    font-size: 16px;
+    font-weight: 700;
+    font-family: 'Noto Sans KR', sans-serif;
+    cursor: pointer;
+    letter-spacing: -0.3px;
+    transition: background 0.15s, transform 0.1s, box-shadow 0.15s;
+    box-shadow: 0 4px 16px rgba(240,90,40,0.35);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+  }
+  .btn-submit:hover { background: var(--primary-dark); box-shadow: 0 6px 20px rgba(240,90,40,0.4); }
+  .btn-submit:active { transform: scale(0.99); }
+  .btn-submit:disabled { background: #ccc; box-shadow: none; cursor: not-allowed; }
+  .btn-submit .spinner {
+    width: 18px; height: 18px;
+    border: 2px solid rgba(255,255,255,0.4);
+    border-top-color: white;
+    border-radius: 50%;
+    animation: spin 0.7s linear infinite;
+    display: none;
+  }
+  .btn-submit.loading .spinner { display: block; }
+  .btn-submit.loading .btn-text { opacity: 0.7; }
+
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* ── Toast / Alert ── */
+  .alert {
+    margin-top: 16px;
+    padding: 14px 16px;
+    border-radius: var(--radius-sm);
+    font-size: 14px;
+    font-weight: 500;
+    display: none;
+    align-items: flex-start;
+    gap: 10px;
+    line-height: 1.5;
+    animation: fadeIn 0.25s ease;
+  }
+  .alert.show { display: flex; }
+  .alert-success {
+    background: #F0FBF6;
+    border: 1px solid rgba(46,173,110,0.3);
+    color: #1A7A4E;
+  }
+  .alert-error {
+    background: #FFF5F5;
+    border: 1px solid rgba(224,49,49,0.25);
+    color: #C12828;
+  }
+  .alert-icon { font-size: 18px; flex-shrink: 0; }
+
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: translateY(0); } }
+
+  /* ── Footer ── */
+  .footer {
+    text-align: center;
+    padding: 32px 16px 20px;
+    font-size: 11px;
+    color: var(--text-muted);
+    line-height: 1.7;
+    max-width: 540px;
+    margin: 0 auto;
+  }
+
+  /* ── Chips info row ── */
+  .info-chips {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    margin-top: 12px;
+  }
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 11px;
+    font-weight: 500;
+    padding: 4px 10px;
+    border-radius: 20px;
+    border: 1px solid var(--border);
+    color: var(--text-secondary);
+    background: var(--white);
+  }
+  .chip-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--primary);
+    flex-shrink: 0;
+  }
+
+  /* ── Responsive ── */
+  @media (max-width: 380px) {
+    .hero h1 { font-size: 19px; }
+    .reason-options { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+  @media (max-width: 380px) {
+    .hero h1 { font-size: 19px; }
+    .reason-options { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <a class="logo" href="#">
+      <svg width="150" height="36" viewBox="0 0 290 72" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <!-- 십자(+) 배지 배경 -->
+        <!-- 가로 막대 -->
+        <rect x="0" y="18" width="72" height="36" rx="8" fill="#FF571C"/>
+        <!-- 세로 막대 -->
+        <rect x="18" y="0" width="36" height="72" rx="8" fill="#FF571C"/>
+        <!-- "the" 흰색 이탤릭 텍스트 -->
+        <text x="36" y="44" 
+              font-family="Georgia, 'Times New Roman', serif" 
+              font-style="italic" 
+              font-size="26" 
+              font-weight="700" 
+              fill="#FFFFFF" 
+              text-anchor="middle">the</text>
+        <!-- "SHOP" 오렌지 굵은 텍스트 -->
+        <text x="88" y="54" 
+              font-family="'Arial Black', 'Franklin Gothic Heavy', 'Noto Sans KR', sans-serif" 
+              font-size="52" 
+              font-weight="900" 
+              fill="#FF571C" 
+              letter-spacing="-1">SHOP</text>
+      </svg>
+    </a>
+    <span class="header-tag">⚡ 긴급배송</span>
+  </div>
+</header>
+
+<div class="page">
+
+  <!-- Hero -->
+  <div class="hero">
+    <div class="hero-icon">⚡</div>
+    <div class="hero-eyebrow">대웅그룹사 전용</div>
+    <h1>긴급배송 신청</h1>
+    <p>주문 후 빠른 배송이 필요하신 경우<br>아래 양식을 작성해 주세요.</p>
+    <div class="info-chips">
+      <span class="chip"><span class="chip-dot"></span>강서구 지역</span>
+      <span class="chip"><span class="chip-dot"></span>09:00~15:00</span>
+      <span class="chip"><span class="chip-dot"></span>3시간 이내</span>
+      <span class="chip"><span class="chip-dot"></span>월 3회 한정</span>
+    </div>
+  </div>
+
+  <!-- Policy -->
+  <div class="policy-card">
+    <div class="policy-header" id="policyToggle" onclick="togglePolicy()">
+      <div class="policy-header-left">
+        <div class="policy-icon">📋</div>
+        <div>
+          <div class="policy-title">긴급배송 이용 정책</div>
+          <div class="policy-subtitle">신청 전 확인해 주세요</div>
+        </div>
+      </div>
+      <div class="policy-toggle" id="policyArrow">▼</div>
+    </div>
+    <div class="policy-body" id="policyBody">
+      <div class="policy-grid">
+        <div class="policy-item">
+          <div class="policy-num">1</div>
+          <div class="policy-content">
+            <div class="policy-label">대상 회원</div>
+            <div class="policy-desc"><span class="policy-highlight">강서구 지역</span> 등록 회원에 한해 이용 가능합니다.</div>
+          </div>
+        </div>
+        <div class="policy-item">
+          <div class="policy-num">2</div>
+          <div class="policy-content">
+            <div class="policy-label">대상 품목</div>
+            <div class="policy-desc"><span class="policy-highlight">대웅제약</span> · <span class="policy-highlight">대웅바이오</span> · <span class="policy-highlight">한올바이오파마</span> 품목만 해당됩니다.</div>
+          </div>
+        </div>
+        <div class="policy-item">
+          <div class="policy-num">3</div>
+          <div class="policy-content">
+            <div class="policy-label">이용 시간</div>
+            <div class="policy-desc">오전 <span class="policy-highlight">09:00 ~ 15:00</span> 사이 주문 건에 한해 <span class="policy-highlight">3시간 이내</span> 배송됩니다.</div>
+          </div>
+        </div>
+        <div class="policy-item">
+          <div class="policy-num">4</div>
+          <div class="policy-content">
+            <div class="policy-label">이용 횟수</div>
+            <div class="policy-desc">회원당 <span class="policy-highlight">월 3회</span>로 제한됩니다. 초과 신청 시 처리가 불가합니다.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Form -->
+  <div class="form-card">
+    <div class="form-section-title">약국 정보</div>
+
+    <div class="form-group">
+      <label for="pharmacyName">약국명 <span class="req">*</span></label>
+      <input type="text" id="pharmacyName" placeholder="예) OO약국" autocomplete="organization" />
+    </div>
+
+    <div class="form-group">
+      <label for="pharmacistName">약사명 <span class="req">*</span></label>
+      <input type="text" id="pharmacistName" placeholder="예) 홍길동" autocomplete="name" />
+    </div>
+
+    <div class="form-group">
+      <label for="contact">연락처 <span class="req">*</span></label>
+      <input type="tel" id="contact" placeholder="예) 010-1234-5678" autocomplete="tel" />
+    </div>
+
+    <div class="divider"></div>
+    <div class="form-section-title">주문 정보</div>
+
+    <div class="form-group">
+      <label for="orderNumber">더샵 주문번호 <span class="req">*</span></label>
+      <input type="text" id="orderNumber" placeholder="더샵 주문번호를 입력해 주세요" />
+    </div>
+
+    <div class="form-group">
+      <label>긴급 요청 사유 <span class="opt-badge">선택</span></label>
+      <div class="reason-options" id="reasonOptions">
+        <button type="button" class="reason-btn" onclick="selectReason(this, '재고 부족 긴급')">재고 부족 긴급</button>
+        <button type="button" class="reason-btn" onclick="selectReason(this, '환자 당일 처방')">환자 당일 처방</button>
+        <button type="button" class="reason-btn" onclick="selectReason(this, '응급 처치 필요')">응급 처치 필요</button>
+        <button type="button" class="reason-btn" onclick="selectReason(this, '직접 입력')">직접 입력</button>
+      </div>
+      <textarea id="reason" placeholder="긴급 배송이 필요한 사유를 입력해 주세요 (선택사항)" style="display:none;"></textarea>
+    </div>
+
+    <div class="submit-wrap">
+      <button class="btn-submit" id="submitBtn" onclick="submitForm()">
+        <span class="spinner" id="spinner"></span>
+        <span class="btn-text">⚡ 긴급배송 신청하기</span>
+      </button>
+      <div class="alert alert-success" id="alertSuccess">
+        <span class="alert-icon">✅</span>
+        <div><strong>신청이 접수되었습니다!</strong><br>담당자가 확인 후 배송을 진행합니다. 잠시만 기다려 주세요.</div>
+      </div>
+      <div class="alert alert-error" id="alertError">
+        <span class="alert-icon">⚠️</span>
+        <div id="alertErrorMsg">오류가 발생했습니다. 잠시 후 다시 시도해 주세요.</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div class="footer">
+  더샵 긴급배송 서비스<br>
+  문의: 더샵 1:1 채팅 문의하기<br><br>
+  © 2026 The Shop. All rights reserved.
+</div>
+
+<script>
+  const GAS_URL = 'https://script.google.com/macros/s/AKfycbwTG2Ne2Gh6wpb-UY092pHVA0y9GMJWIaHpjEMNr5PZL-5S65D1Y-lpAifprclJvaw/exec'; // ← 배포 후 Google Apps Script URL로 교체
+
+  let selectedReason = '';
+
+  function togglePolicy() {
+    const body = document.getElementById('policyBody');
+    const arrow = document.getElementById('policyArrow');
+    const isOpen = body.classList.contains('open');
+    body.classList.toggle('open', !isOpen);
+    arrow.classList.toggle('open', !isOpen);
+  }
+
+  function selectReason(btn, value) {
+    document.querySelectorAll('.reason-btn').forEach(b => b.classList.remove('selected'));
+    btn.classList.add('selected');
+    const textarea = document.getElementById('reason');
+    if (value === '직접 입력') {
+      selectedReason = '';
+      textarea.style.display = 'block';
+      textarea.focus();
+    } else {
+      selectedReason = value;
+      textarea.style.display = 'none';
+      textarea.value = '';
+    }
+  }
+
+  function getReasonValue() {
+    const textarea = document.getElementById('reason');
+    if (textarea.style.display !== 'none' && textarea.value.trim()) {
+      return textarea.value.trim();
+    }
+    return selectedReason;
+  }
+
+  function setError(id, show) {
+    const el = document.getElementById(id);
+    if (show) el.classList.add('error');
+    else el.classList.remove('error');
+  }
+
+  function showAlert(type, msg) {
+    document.getElementById('alertSuccess').classList.remove('show');
+    document.getElementById('alertError').classList.remove('show');
+    if (type === 'success') {
+      document.getElementById('alertSuccess').classList.add('show');
+    } else {
+      document.getElementById('alertErrorMsg').textContent = msg || '오류가 발생했습니다. 잠시 후 다시 시도해 주세요.';
+      document.getElementById('alertError').classList.add('show');
+    }
+  }
+
+  async function submitForm() {
+    const pharmacy  = document.getElementById('pharmacyName').value.trim();
+    const pharmacist = document.getElementById('pharmacistName').value.trim();
+    const contact   = document.getElementById('contact').value.trim();
+    const order     = document.getElementById('orderNumber').value.trim();
+
+    let hasError = false;
+    [['pharmacyName', pharmacy], ['pharmacistName', pharmacist],
+     ['contact', contact], ['orderNumber', order]].forEach(([id, val]) => {
+      if (!val) { setError(id, true); hasError = true; }
+      else setError(id, false);
+    });
+
+    if (hasError) {
+      showAlert('error', '필수 항목을 모두 입력해 주세요.');
+      document.querySelector('.error')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      return;
+    }
+
+    const btn = document.getElementById('submitBtn');
+    btn.classList.add('loading');
+    btn.disabled = true;
+    document.getElementById('alertSuccess').classList.remove('show');
+    document.getElementById('alertError').classList.remove('show');
+
+    const payload = {
+      약국명:   pharmacy,
+      약사명:   pharmacist,
+      연락처:   contact,
+      주문번호: order,
+      긴급사유: getReasonValue() || '',
+      신청시간: new Date().toLocaleString('ko-KR', { timeZone: 'Asia/Seoul' })
+    };
+
+    try {
+      if (!GAS_URL || GAS_URL.includes('YOUR_')) {
+        throw new Error('Google Apps Script URL이 설정되지 않았습니다. 관리자에게 문의하세요.');
+      }
+      await fetch(GAS_URL, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      showAlert('success');
+      document.getElementById('pharmacyName').value = '';
+      document.getElementById('pharmacistName').value = '';
+      document.getElementById('contact').value = '';
+      document.getElementById('orderNumber').value = '';
+      document.getElementById('reason').value = '';
+      document.getElementById('reason').style.display = 'none';
+      selectedReason = '';
+      document.querySelectorAll('.reason-btn').forEach(b => b.classList.remove('selected'));
+    } catch (e) {
+      showAlert('error', e.message || '전송에 실패했습니다. 잠시 후 다시 시도해 주세요.');
+    } finally {
+      btn.classList.remove('loading');
+      btn.disabled = false;
+    }
+  }
+
+  // 전화번호 자동 하이픈
+  document.getElementById('contact').addEventListener('input', function () {
+    let v = this.value.replace(/\D/g, '');
+    if (v.length <= 3)       this.value = v;
+    else if (v.length <= 7)  this.value = v.slice(0,3) + '-' + v.slice(3);
+    else if (v.length <= 11) this.value = v.slice(0,3) + '-' + v.slice(3,7) + '-' + v.slice(7);
+    else                     this.value = v.slice(0,3) + '-' + v.slice(3,7) + '-' + v.slice(7,11);
+  });
+</script>
+</body>
+</html>
