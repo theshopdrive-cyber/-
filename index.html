@@ -106,19 +106,13 @@
     background: rgba(255,255,255,0.06);
   }
   .hero-eyebrow {
-    font-size: 11px;
-    font-weight: 600;
-    letter-spacing: 1.5px;
-    text-transform: uppercase;
-    opacity: 0.8;
-    margin-bottom: 8px;
+    font-size: 11px; font-weight: 600;
+    letter-spacing: 1.5px; text-transform: uppercase;
+    opacity: 0.8; margin-bottom: 8px;
   }
   .hero h1 {
-    font-size: 22px;
-    font-weight: 700;
-    letter-spacing: -0.5px;
-    margin-bottom: 6px;
-    line-height: 1.3;
+    font-size: 22px; font-weight: 700;
+    letter-spacing: -0.5px; margin-bottom: 6px; line-height: 1.3;
   }
   .hero p { font-size: 13px; opacity: 0.85; line-height: 1.5; }
   .hero-icon { font-size: 28px; margin-bottom: 10px; }
@@ -133,12 +127,8 @@
     box-shadow: var(--shadow);
   }
   .policy-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 16px 20px;
-    cursor: pointer;
-    user-select: none;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 16px 20px; cursor: pointer; user-select: none;
     transition: background 0.15s;
   }
   .policy-header:hover { background: var(--bg); }
@@ -155,11 +145,9 @@
   .policy-toggle {
     width: 24px; height: 24px;
     display: flex; align-items: center; justify-content: center;
-    border-radius: 50%;
-    background: var(--bg);
+    border-radius: 50%; background: var(--bg);
     transition: transform 0.25s;
-    color: var(--text-secondary);
-    font-size: 12px;
+    color: var(--text-secondary); font-size: 12px;
   }
   .policy-toggle.open { transform: rotate(180deg); }
   .policy-body { display: none; padding: 0 20px 20px; border-top: 1px solid var(--border); }
@@ -168,8 +156,7 @@
   .policy-item { display: flex; gap: 12px; align-items: flex-start; }
   .policy-num {
     width: 22px; height: 22px;
-    background: var(--primary);
-    color: white;
+    background: var(--primary); color: white;
     border-radius: 50%;
     display: flex; align-items: center; justify-content: center;
     font-size: 11px; font-weight: 700;
@@ -177,19 +164,40 @@
   }
   .policy-label {
     font-size: 11px; font-weight: 600;
-    color: var(--accent); margin-bottom: 2px;
+    color: var(--accent); margin-bottom: 4px;
     text-transform: uppercase; letter-spacing: 0.5px;
   }
-  .policy-desc { font-size: 13px; color: var(--text-primary); line-height: 1.5; }
+  .policy-desc { font-size: 13px; color: var(--text-primary); line-height: 1.6; }
   .policy-highlight {
     display: inline-block;
-    background: var(--primary-light);
-    color: var(--primary);
-    font-weight: 600;
-    padding: 1px 6px;
-    border-radius: 4px;
-    font-size: 12px;
+    background: var(--primary-light); color: var(--primary);
+    font-weight: 600; padding: 1px 6px;
+    border-radius: 4px; font-size: 12px;
   }
+
+  /* 이용 횟수 서브 리스트 */
+  .policy-sub-list { display: flex; flex-direction: column; gap: 5px; margin-top: 2px; }
+  .policy-sub-item {
+    font-size: 12px; color: var(--text-secondary);
+    line-height: 1.6; padding-left: 12px; position: relative;
+  }
+  .policy-sub-item::before {
+    content: '·'; position: absolute; left: 0;
+    color: var(--primary); font-weight: 900; font-size: 14px; line-height: 1.3;
+  }
+
+  /* 참고 사항 박스 */
+  .policy-note {
+    margin-top: 16px;
+    background: #FFFBF0;
+    border: 1px solid #FFE0A0;
+    border-radius: var(--radius-sm);
+    padding: 12px 14px;
+    display: flex; gap: 8px; align-items: flex-start;
+  }
+  .policy-note-icon { font-size: 14px; flex-shrink: 0; margin-top: 1px; }
+  .policy-note-text { font-size: 12px; color: #7A5800; line-height: 1.6; }
+  .policy-note-text strong { font-weight: 700; display: block; margin-bottom: 2px; }
 
   /* ── Form Card ── */
   .form-card {
@@ -208,31 +216,22 @@
   }
   .form-group { margin-bottom: 16px; }
   .form-group:last-of-type { margin-bottom: 0; }
-
   label { display: block; font-size: 13px; font-weight: 600; color: var(--text-primary); margin-bottom: 6px; }
   .req { color: var(--primary); margin-left: 2px; }
   .opt-badge {
-    font-size: 10px; font-weight: 500;
-    color: var(--text-muted);
-    background: var(--bg);
-    border: 1px solid var(--border);
-    border-radius: 4px;
-    padding: 1px 5px; margin-left: 5px;
-    vertical-align: middle;
+    font-size: 10px; font-weight: 500; color: var(--text-muted);
+    background: var(--bg); border: 1px solid var(--border);
+    border-radius: 4px; padding: 1px 5px; margin-left: 5px; vertical-align: middle;
   }
 
   input[type="text"], input[type="tel"], textarea, select {
-    width: 100%;
-    padding: 12px 14px;
+    width: 100%; padding: 12px 14px;
     border: 1.5px solid var(--border);
     border-radius: var(--radius-sm);
-    font-size: 15px;
-    font-family: 'Noto Sans KR', sans-serif;
-    color: var(--text-primary);
-    background: var(--white);
+    font-size: 15px; font-family: 'Noto Sans KR', sans-serif;
+    color: var(--text-primary); background: var(--white);
     transition: border-color 0.15s, box-shadow 0.15s;
-    outline: none;
-    -webkit-appearance: none;
+    outline: none; -webkit-appearance: none;
   }
   input::placeholder, textarea::placeholder { color: var(--text-muted); font-size: 14px; }
   input:focus, textarea:focus, select:focus {
@@ -243,20 +242,14 @@
   textarea { resize: vertical; min-height: 90px; line-height: 1.5; }
 
   .reason-options {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 8px;
-    margin-bottom: 10px;
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 8px; margin-bottom: 10px;
   }
   .reason-btn {
-    padding: 10px;
-    border: 1.5px solid var(--border);
-    border-radius: var(--radius-sm);
-    background: var(--white);
-    font-size: 12px; font-weight: 500;
-    color: var(--text-secondary);
-    cursor: pointer; text-align: center;
-    transition: all 0.15s;
+    padding: 10px; border: 1.5px solid var(--border);
+    border-radius: var(--radius-sm); background: var(--white);
+    font-size: 12px; font-weight: 500; color: var(--text-secondary);
+    cursor: pointer; text-align: center; transition: all 0.15s;
     font-family: 'Noto Sans KR', sans-serif;
   }
   .reason-btn:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-light); }
@@ -268,8 +261,7 @@
   .submit-wrap { margin-top: 24px; }
   .btn-submit {
     width: 100%; padding: 16px;
-    background: var(--primary);
-    color: white; border: none;
+    background: var(--primary); color: white; border: none;
     border-radius: var(--radius-sm);
     font-size: 16px; font-weight: 700;
     font-family: 'Noto Sans KR', sans-serif;
@@ -284,10 +276,8 @@
   .btn-submit .spinner {
     width: 18px; height: 18px;
     border: 2px solid rgba(255,255,255,0.4);
-    border-top-color: white;
-    border-radius: 50%;
-    animation: spin 0.7s linear infinite;
-    display: none;
+    border-top-color: white; border-radius: 50%;
+    animation: spin 0.7s linear infinite; display: none;
   }
   .btn-submit.loading .spinner { display: block; }
   .btn-submit.loading .btn-text { opacity: 0.7; }
@@ -310,13 +300,9 @@
 
   /* ── Footer ── */
   .footer {
-    text-align: center;
-    padding: 32px 16px 20px;
-    font-size: 11px;
-    color: var(--text-muted);
-    line-height: 1.7;
-    max-width: 540px;
-    margin: 0 auto;
+    text-align: center; padding: 32px 16px 20px;
+    font-size: 11px; color: var(--text-muted);
+    line-height: 1.7; max-width: 540px; margin: 0 auto;
   }
 
   /* ── Info Chips ── */
@@ -330,6 +316,36 @@
     background: rgba(255,255,255,0.9);
   }
   .chip-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--primary); flex-shrink: 0; }
+
+  /* ── 주말 비활성 배너 ── */
+  .weekend-banner {
+    display: none;
+    background: #F2F4F8;
+    border: 1.5px solid #C8D0DC;
+    border-radius: var(--radius);
+    padding: 24px 20px;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+  .weekend-banner.show { display: block; }
+  .weekend-banner-icon { font-size: 38px; margin-bottom: 12px; }
+  .weekend-banner-title { font-size: 16px; font-weight: 700; color: #3A4A5C; margin-bottom: 8px; }
+  .weekend-banner-desc { font-size: 13px; color: var(--text-secondary); line-height: 1.7; }
+  .weekend-banner-highlight {
+    display: inline-block;
+    background: var(--accent); color: white;
+    font-weight: 700; padding: 3px 14px;
+    border-radius: 20px; font-size: 13px; margin: 6px 0;
+  }
+  .weekend-banner-clock { font-size: 11px; color: var(--text-muted); margin-top: 12px; }
+  .weekend-banner-clock span { font-weight: 600; color: var(--text-secondary); }
+
+  /* 비활성 흐리게 + 클릭 차단 */
+  .section-disabled {
+    opacity: 0.4;
+    pointer-events: none;
+    user-select: none;
+  }
 
   /* ── Responsive ── */
   @media (max-width: 380px) {
@@ -376,8 +392,20 @@
     </div>
   </div>
 
+  <!-- 주말 비활성 배너 -->
+  <div class="weekend-banner" id="weekendBanner">
+    <div class="weekend-banner-icon">📅</div>
+    <div class="weekend-banner-title">주말에는 긴급배송을 운영하지 않습니다</div>
+    <div class="weekend-banner-desc">
+      긴급배송 신청은<br>
+      <span class="weekend-banner-highlight">평일 (월~금) 운영</span><br>
+      평일에 다시 방문해 주세요.
+    </div>
+    <div class="weekend-banner-clock">현재 한국 시간: <span id="currentTime">--:--</span></div>
+  </div>
+
   <!-- Policy -->
-  <div class="policy-card">
+  <div class="policy-card" id="policyCard">
     <div class="policy-header" id="policyToggle" onclick="togglePolicy()">
       <div class="policy-header-left">
         <div class="policy-icon">📋</div>
@@ -390,6 +418,7 @@
     </div>
     <div class="policy-body" id="policyBody">
       <div class="policy-grid">
+
         <div class="policy-item">
           <div class="policy-num">1</div>
           <div class="policy-content">
@@ -397,6 +426,7 @@
             <div class="policy-desc"><span class="policy-highlight">강서구 지역</span> 등록 회원에 한해 이용 가능합니다.</div>
           </div>
         </div>
+
         <div class="policy-item">
           <div class="policy-num">2</div>
           <div class="policy-content">
@@ -404,6 +434,7 @@
             <div class="policy-desc"><span class="policy-highlight">대웅제약</span> · <span class="policy-highlight">대웅바이오</span> · <span class="policy-highlight">한올바이오파마</span> 품목만 해당됩니다.</div>
           </div>
         </div>
+
         <div class="policy-item">
           <div class="policy-num">3</div>
           <div class="policy-content">
@@ -411,19 +442,40 @@
             <div class="policy-desc">오전 <span class="policy-highlight">09:00 ~ 15:00</span> 사이 주문 건에 한해 <span class="policy-highlight">3시간 이내</span> 배송됩니다.</div>
           </div>
         </div>
+
         <div class="policy-item">
           <div class="policy-num">4</div>
           <div class="policy-content">
             <div class="policy-label">이용 횟수</div>
-            <div class="policy-desc">회원당 <span class="policy-highlight">월 3회</span>로 제한됩니다. 초과 신청 시 처리가 불가합니다.</div>
+            <div class="policy-desc">
+              <div class="policy-sub-list">
+                <div class="policy-sub-item">
+                  <span class="policy-highlight">3월 23일~31일</span> 프리오픈 기간 — 회원당 <span class="policy-highlight">월 1회</span> 이용 가능
+                </div>
+                <div class="policy-sub-item">
+                  <span class="policy-highlight">4월</span> 운영 기간 — 회원당 <span class="policy-highlight">월 3회</span> 이용 가능
+                </div>
+              </div>
+            </div>
           </div>
         </div>
+
       </div>
+
+      <!-- 참고 사항 -->
+      <div class="policy-note">
+        <div class="policy-note-icon">⚠️</div>
+        <div class="policy-note-text">
+          <strong>참고 사항</strong>
+          공장출하 등 '거점'이 아닌 출고지의 주문 건은 긴급배송이 불가할 수 있습니다.
+        </div>
+      </div>
+
     </div>
   </div>
 
   <!-- Form -->
-  <div class="form-card">
+  <div class="form-card" id="formCard">
     <div class="form-section-title">약국 정보</div>
 
     <div class="form-group">
@@ -489,6 +541,42 @@
 
   let selectedReason = '';
 
+  // ── 주말 비활성 체크 (한국 시간 기준) ──
+  function checkWeekend() {
+    const now = new Date();
+    const kst = new Date(now.toLocaleString('en-US', { timeZone: 'Asia/Seoul' }));
+    const day = kst.getDay(); // 0=일요일, 6=토요일
+    const isWeekend = (day === 0 || day === 6);
+
+    // 현재 시간 표시
+    const dayNames = ['일', '월', '화', '수', '목', '금', '토'];
+    const hh = String(kst.getHours()).padStart(2, '0');
+    const mm = String(kst.getMinutes()).padStart(2, '0');
+    const timeEl = document.getElementById('currentTime');
+    if (timeEl) timeEl.textContent = `${dayNames[day]}요일 ${hh}:${mm}`;
+
+    const banner   = document.getElementById('weekendBanner');
+    const policy   = document.getElementById('policyCard');
+    const formCard = document.getElementById('formCard');
+    const submitBtn = document.getElementById('submitBtn');
+
+    if (isWeekend) {
+      banner.classList.add('show');
+      policy.classList.add('section-disabled');
+      formCard.classList.add('section-disabled');
+      submitBtn.disabled = true;
+    } else {
+      banner.classList.remove('show');
+      policy.classList.remove('section-disabled');
+      formCard.classList.remove('section-disabled');
+      submitBtn.disabled = false;
+    }
+  }
+
+  checkWeekend();
+  setInterval(checkWeekend, 30000); // 30초마다 재확인
+
+  // ── 정책 토글 ──
   function togglePolicy() {
     const body = document.getElementById('policyBody');
     const arrow = document.getElementById('policyArrow');
