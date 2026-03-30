@@ -317,28 +317,55 @@
   }
   .chip-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--primary); flex-shrink: 0; }
 
-  /* ── 주말 비활성 배너 ── */
-  .weekend-banner {
+  /* ── 비활성 배너 (주말 / 시간 외 / 특별 마감 공통) ── */
+  .inactive-banner {
     display: none;
-    background: #F2F4F8;
-    border: 1.5px solid #C8D0DC;
     border-radius: var(--radius);
     padding: 24px 20px;
     margin-bottom: 20px;
     text-align: center;
   }
-  .weekend-banner.show { display: block; }
-  .weekend-banner-icon { font-size: 38px; margin-bottom: 12px; }
-  .weekend-banner-title { font-size: 16px; font-weight: 700; color: #3A4A5C; margin-bottom: 8px; }
-  .weekend-banner-desc { font-size: 13px; color: var(--text-secondary); line-height: 1.7; }
-  .weekend-banner-highlight {
+  .inactive-banner.show { display: block; }
+
+  /* 주말 스타일 (회색) */
+  .inactive-banner.type-weekend {
+    background: #F2F4F8;
+    border: 1.5px solid #C8D0DC;
+  }
+  /* 시간 외 스타일 (파란 계열) */
+  .inactive-banner.type-time {
+    background: #EFF4FA;
+    border: 1.5px solid #A8C4E0;
+  }
+  /* 특별 마감 스타일 (주황 계열) */
+  .inactive-banner.type-special {
+    background: #FFF4EE;
+    border: 1.5px solid #FFBB99;
+  }
+
+  .inactive-banner-icon { font-size: 38px; margin-bottom: 12px; }
+  .inactive-banner-title { font-size: 16px; font-weight: 700; margin-bottom: 8px; }
+  .type-weekend  .inactive-banner-title { color: #3A4A5C; }
+  .type-time     .inactive-banner-title { color: #1A4A6E; }
+  .type-special  .inactive-banner-title { color: #8A3000; }
+
+  .inactive-banner-desc { font-size: 13px; color: var(--text-secondary); line-height: 1.7; }
+  .inactive-banner-highlight {
     display: inline-block;
-    background: var(--accent); color: white;
     font-weight: 700; padding: 3px 14px;
     border-radius: 20px; font-size: 13px; margin: 6px 0;
+    color: white;
   }
-  .weekend-banner-clock { font-size: 11px; color: var(--text-muted); margin-top: 12px; }
-  .weekend-banner-clock span { font-weight: 600; color: var(--text-secondary); }
+  .type-weekend  .inactive-banner-highlight { background: #5A6A7E; }
+  .type-time     .inactive-banner-highlight { background: var(--accent); }
+  .type-special  .inactive-banner-highlight { background: var(--primary); }
+
+  .inactive-banner-sub {
+    font-size: 11px; color: var(--text-muted);
+    margin-top: 8px; line-height: 1.6;
+  }
+  .inactive-banner-clock { font-size: 11px; color: var(--text-muted); margin-top: 10px; }
+  .inactive-banner-clock span { font-weight: 600; color: var(--text-secondary); }
 
   /* 비활성 흐리게 + 클릭 차단 */
   .section-disabled {
@@ -392,16 +419,13 @@
     </div>
   </div>
 
-  <!-- 주말 비활성 배너 -->
-  <div class="weekend-banner" id="weekendBanner">
-    <div class="weekend-banner-icon">📅</div>
-    <div class="weekend-banner-title">주말에는 긴급배송을 운영하지 않습니다</div>
-    <div class="weekend-banner-desc">
-      긴급배송 신청은<br>
-      <span class="weekend-banner-highlight">평일 (월~금) 운영</span><br>
-      평일에 다시 방문해 주세요.
-    </div>
-    <div class="weekend-banner-clock">현재 한국 시간: <span id="currentTime">--:--</span></div>
+  <!-- 비활성 배너 (주말 / 시간 외 / 특별 마감) -->
+  <div class="inactive-banner" id="inactiveBanner">
+    <div class="inactive-banner-icon" id="bannerIcon"></div>
+    <div class="inactive-banner-title" id="bannerTitle"></div>
+    <div class="inactive-banner-desc" id="bannerDesc"></div>
+    <div class="inactive-banner-sub" id="bannerSub"></div>
+    <div class="inactive-banner-clock">현재 한국 시간: <span id="currentTime">--:--</span></div>
   </div>
 
   <!-- Policy -->
@@ -541,40 +565,90 @@
 
   let selectedReason = '';
 
-  // ── 주말 비활성 체크 (한국 시간 기준) ──
-  function checkWeekend() {
+  // ── 운영 가능 여부 체크 (한국 시간 기준) ──
+  function checkAvailability() {
     const now = new Date();
     const kst = new Date(now.toLocaleString('en-US', { timeZone: 'Asia/Seoul' }));
-    const day = kst.getDay(); // 0=일요일, 6=토요일
-    const isWeekend = (day === 0 || day === 6);
+
+    const year  = kst.getFullYear();
+    const month = kst.getMonth() + 1; // 1~12
+    const date  = kst.getDate();
+    const day   = kst.getDay();       // 0=일, 6=토
+    const hour  = kst.getHours();
+    const min   = kst.getMinutes();
+    const totalMin = hour * 60 + min;
 
     // 현재 시간 표시
     const dayNames = ['일', '월', '화', '수', '목', '금', '토'];
-    const hh = String(kst.getHours()).padStart(2, '0');
-    const mm = String(kst.getMinutes()).padStart(2, '0');
-    const timeEl = document.getElementById('currentTime');
-    if (timeEl) timeEl.textContent = `${dayNames[day]}요일 ${hh}:${mm}`;
+    const hh = String(hour).padStart(2, '0');
+    const mm = String(min).padStart(2, '0');
+    document.getElementById('currentTime').textContent = `${dayNames[day]}요일 ${hh}:${mm}`;
 
-    const banner   = document.getElementById('weekendBanner');
-    const policy   = document.getElementById('policyCard');
-    const formCard = document.getElementById('formCard');
+    const banner  = document.getElementById('inactiveBanner');
+    const policy  = document.getElementById('policyCard');
+    const form    = document.getElementById('formCard');
     const submitBtn = document.getElementById('submitBtn');
 
+    let inactive = false;
+    let type = '';
+    let icon = '', title = '', desc = '', sub = '';
+
+    const isWeekend = (day === 0 || day === 6);
+    const isMar31   = (year === 2026 && month === 3 && date === 31);
+
     if (isWeekend) {
-      banner.classList.add('show');
+      // ① 주말
+      inactive = true;
+      type  = 'type-weekend';
+      icon  = '📅';
+      title = '주말에는 긴급배송을 운영하지 않습니다';
+      desc  = `긴급배송 신청은<br><span class="inactive-banner-highlight">평일 (월~금) 운영</span><br>평일에 다시 방문해 주세요.`;
+      sub   = '';
+
+    } else if (isMar31) {
+      // ② 2026년 3월 31일 — 특별 마감 (09:00~10:10만 활성)
+      const isActive = (totalMin >= 9 * 60 && totalMin < 10 * 60 + 10);
+      if (!isActive) {
+        inactive = true;
+        type  = 'type-special';
+        icon  = '⚠️';
+        title = '3월 31일 긴급배송 신청이 마감되었습니다';
+        desc  = `대웅그룹사 판매 마감으로 인해<br>3월 31일은 <span class="inactive-banner-highlight">09:00 ~ 10:00</span>까지만 운영됩니다.`;
+        sub   = '4월 1일(수)부터 평일 09:00~15:10 정상 운영됩니다.';
+      }
+
+    } else {
+      // ③ 일반 평일 — 09:00~15:10만 활성
+      const isActive = (totalMin >= 9 * 60 && totalMin < 15 * 60 + 10);
+      if (!isActive) {
+        inactive = true;
+        type  = 'type-time';
+        icon  = '🕐';
+        title = '현재 긴급배송 신청 시간이 아닙니다';
+        desc  = `긴급배송 신청은 평일<br><span class="inactive-banner-highlight">오전 09:00 ~ 오후 15:00</span><br>에만 가능합니다.`;
+        sub   = '';
+      }
+    }
+
+    if (inactive) {
+      banner.className = `inactive-banner show ${type}`;
+      document.getElementById('bannerIcon').textContent  = icon;
+      document.getElementById('bannerTitle').textContent = title;
+      document.getElementById('bannerDesc').innerHTML    = desc;
+      document.getElementById('bannerSub').textContent   = sub;
       policy.classList.add('section-disabled');
-      formCard.classList.add('section-disabled');
+      form.classList.add('section-disabled');
       submitBtn.disabled = true;
     } else {
-      banner.classList.remove('show');
+      banner.className = 'inactive-banner';
       policy.classList.remove('section-disabled');
-      formCard.classList.remove('section-disabled');
+      form.classList.remove('section-disabled');
       submitBtn.disabled = false;
     }
   }
 
-  checkWeekend();
-  setInterval(checkWeekend, 30000); // 30초마다 재확인
+  checkAvailability();
+  setInterval(checkAvailability, 30000); // 30초마다 재확인
 
   // ── 정책 토글 ──
   function togglePolicy() {
