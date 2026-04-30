@@ -342,12 +342,18 @@
     background: #FFF4EE;
     border: 1.5px solid #FFBB99;
   }
+  /* 서비스 종료 스타일 (회색 계열) */
+  .inactive-banner.type-ended {
+    background: #F5F5F5;
+    border: 1.5px solid #D0D0D0;
+  }
 
   .inactive-banner-icon { font-size: 38px; margin-bottom: 12px; }
   .inactive-banner-title { font-size: 16px; font-weight: 700; margin-bottom: 8px; }
   .type-weekend  .inactive-banner-title { color: #3A4A5C; }
   .type-time     .inactive-banner-title { color: #1A4A6E; }
   .type-special  .inactive-banner-title { color: #8A3000; }
+  .type-ended    .inactive-banner-title { color: #3A3A3A; }
 
   .inactive-banner-desc { font-size: 13px; color: var(--text-secondary); line-height: 1.7; }
   .inactive-banner-highlight {
@@ -359,6 +365,7 @@
   .type-weekend  .inactive-banner-highlight { background: #5A6A7E; }
   .type-time     .inactive-banner-highlight { background: var(--accent); }
   .type-special  .inactive-banner-highlight { background: var(--primary); }
+  .type-ended    .inactive-banner-highlight { background: #888; }
 
   .inactive-banner-sub {
     font-size: 11px; color: var(--text-muted);
@@ -419,7 +426,7 @@
     </div>
   </div>
 
-  <!-- 비활성 배너 (주말 / 시간 외 / 특별 마감) -->
+  <!-- 비활성 배너 (주말 / 시간 외 / 특별 마감 / 서비스 종료) -->
   <div class="inactive-banner" id="inactiveBanner">
     <div class="inactive-banner-icon" id="bannerIcon"></div>
     <div class="inactive-banner-title" id="bannerTitle"></div>
@@ -593,40 +600,55 @@
     let type = '';
     let icon = '', title = '', desc = '', sub = '';
 
-    const isWeekend = (day === 0 || day === 6);
-    const isMar31   = (year === 2026 && month === 3 && date === 31);
+    // ── 4월 시범운영 종료 체크 (4/30부터 종료) ──
+    const isServiceEnded = (year > 2026)
+      || (year === 2026 && month > 4)
+      || (year === 2026 && month === 4 && date >= 30);
 
-    if (isWeekend) {
-      // ① 주말
+    if (isServiceEnded) {
       inactive = true;
-      type  = 'type-weekend';
-      icon  = '📅';
-      title = '주말에는 긴급배송을 운영하지 않습니다';
-      desc  = `긴급배송 신청은<br><span class="inactive-banner-highlight">평일 (월~금) 운영</span><br>평일에 다시 방문해 주세요.`;
-      sub   = '';
-
-    } else if (isMar31) {
-      // ② 2026년 3월 31일 — 특별 마감 (09:00~10:10만 활성)
-      const isActive = (totalMin >= 9 * 60 && totalMin < 10 * 60 + 10);
-      if (!isActive) {
-        inactive = true;
-        type  = 'type-special';
-        icon  = '⚠️';
-        title = '3월 31일 긴급배송 신청이 마감되었습니다';
-        desc  = `대웅그룹사 판매 마감으로 인해<br>3월 31일은 <span class="inactive-banner-highlight">09:00 ~ 10:00</span>까지만 운영됩니다.`;
-        sub   = '4월 1일(수)부터 평일 09:00~15:10 정상 운영됩니다.';
-      }
+      type  = 'type-ended';
+      icon  = '📋';
+      title = '긴급배송 시범운영이 종료되었습니다';
+      desc  = `4월 시범운영 기간이 종료되어<br>긴급배송 신청이 <span class="inactive-banner-highlight">마감</span>되었습니다.`;
+      sub   = '그동안 이용해 주셔서 감사합니다. 문의사항은 더샵 1:1 채팅을 이용해 주세요.';
 
     } else {
-      // ③ 일반 평일 — 09:00~15:10만 활성
-      const isActive = (totalMin >= 9 * 60 && totalMin < 15 * 60 + 10);
-      if (!isActive) {
+      const isWeekend = (day === 0 || day === 6);
+      const isMar31   = (year === 2026 && month === 3 && date === 31);
+
+      if (isWeekend) {
+        // ① 주말
         inactive = true;
-        type  = 'type-time';
-        icon  = '🕐';
-        title = '현재 긴급배송 신청 시간이 아닙니다';
-        desc  = `긴급배송 신청은 평일<br><span class="inactive-banner-highlight">오전 09:00 ~ 오후 15:00</span><br>에만 가능합니다.`;
+        type  = 'type-weekend';
+        icon  = '📅';
+        title = '주말에는 긴급배송을 운영하지 않습니다';
+        desc  = `긴급배송 신청은<br><span class="inactive-banner-highlight">평일 (월~금) 운영</span><br>평일에 다시 방문해 주세요.`;
         sub   = '';
+
+      } else if (isMar31) {
+        // ② 2026년 3월 31일 — 특별 마감 (09:00~10:10만 활성)
+        const isActive = (totalMin >= 9 * 60 && totalMin < 10 * 60 + 10);
+        if (!isActive) {
+          inactive = true;
+          type  = 'type-special';
+          icon  = '⚠️';
+          title = '3월 31일 긴급배송 신청이 마감되었습니다';
+          desc  = `대웅그룹사 판매 마감으로 인해<br>3월 31일은 <span class="inactive-banner-highlight">09:00 ~ 10:00</span>까지만 운영됩니다.`;
+          sub   = '4월 1일(수)부터 평일 09:00~15:10 정상 운영됩니다.';
+        }
+
+      } else {
+        // ③ 일반 평일 — 09:00~15:10만 활성
+        const isActive = (totalMin >= 9 * 60 && totalMin < 15 * 60 + 10);
+        if (!isActive) {
+          inactive = true;
+          type  = 'type-time';
+          icon  = '🕐';
+          title = '현재 긴급배송 신청 시간이 아닙니다';
+          desc  = `긴급배송 신청은 평일<br><span class="inactive-banner-highlight">오전 09:00 ~ 오후 15:00</span><br>에만 가능합니다.`;
+          sub   = '';
+        }
       }
     }
 
